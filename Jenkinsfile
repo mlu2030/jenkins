@@ -54,11 +54,12 @@ pipeline {
             steps {
 
                 echo 'deploying application ...'
-                withCredentials([
-                    usernamePassword(credentials: 'MDE101', usernameVariable: USER, passwordVariable: PWD)
-                ]) {
-                    echo "deploying version ${params.VERSION} by ${USER}"
-                }
+                echo "deploying version ${params.VERSION}"
+                // withCredentials([
+                //     usernamePassword(credentials: 'MDE101', usernameVariable: USER, passwordVariable: PWD)
+                // ]) {
+                //     echo "deploying version ${params.VERSION} by ${USER}"
+                // }
                 
             }
         }
