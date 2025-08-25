@@ -1,6 +1,8 @@
 // CODE_CHANGES = getGitChanges()
 // All env vars - http://cj08:8080/env-vars.html/
 
+def gv
+
 pipeline {
     agent any
 
@@ -20,6 +22,15 @@ pipeline {
     }
     stages {
 
+        stage("init") {
+
+            steps {
+                script {
+                    gv = load "script.groovy"
+                }
+            }
+        }
+
         stage("build") {
 
             when {
@@ -28,10 +39,9 @@ pipeline {
                 }
             }
             steps {
-
-                echo 'building application ...'
-                echo "building new version ${NEW_VERSION}"
-                // sh "mvn install"
+                script {
+                    gv.buildApp()
+                }
             }
         }
 
@@ -43,24 +53,18 @@ pipeline {
                 }
             }
             steps {
-
-                echo 'testing application ...'
-                
+                script {
+                    gv.testApp()
+                }
             }
         }
 
         stage("deploy") {
 
             steps {
-
-                echo 'deploying application ...'
-                echo "deploying version ${params.VERSION}"
-                // withCredentials([
-                //     usernamePassword(credentials: 'MDE101', usernameVariable: USER, passwordVariable: PWD)
-                // ]) {
-                //     echo "deploying version ${params.VERSION} by ${USER}"
-                // }
-                
+                script {
+                    gv.deployApp()
+                }
             }
         }
 
